@@ -123,7 +123,18 @@ void *mmm_par(void *args) {
  * in the result matrices
  */
 double mmm_verify() {
+    double difference=0;
+
+    for(int i = 0; i < size; i++) {  //row 
+        for(int j = 0; j < size; j++) { //column
+            for(int k = 0; k < size; k++) { // dot product
+                if(SEQ_MATRIX[i][j]-PAR_MATRIX[i][j]>difference){
+                    difference=fabs(SEQ_MATRIX[i][j]-PAR_MATRIX[i][j]);
+                }
+            }
+        }
+    }
 	// TODO
 	// You may find the math.h function fabs() to be useful here (absolute value)
-	return -1;
+	return difference;
 }
