@@ -9,7 +9,7 @@
 unsigned char mode;
 unsigned int size, num_threads;
 double **A, **B, **SEQ_MATRIX, **PAR_MATRIX;
-int number_of_runs = 3;
+int number_of_runs = 4;
 double average_seq_time = 0;
 double average_par_time = 0;
 
@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 		if (argc == 3)
 		{
 			printf("Error: parallel mode requires [num threads]\n");
+			return 1;
 		}
 		else
 		{
@@ -67,13 +68,15 @@ int main(int argc, char *argv[])
 			// printf("s \n");
 			mmm_seq();
 			clockend = rtclock(); // stop the clock
-			average_seq_time = average_seq_time + (clockend - clockstart);
+			if(number_of_runs!=4){
+				average_seq_time = average_seq_time + (clockend - clockstart); //ignore the first time
+			}
 			//printf("%d \n", number_of_runs);
 			number_of_runs--;
 		}
 	}
 
-	number_of_runs = 3;
+	number_of_runs = 4;
 
 	while (number_of_runs > 0)
 	{
@@ -135,8 +138,12 @@ int main(int argc, char *argv[])
 			free(args);
 			args = NULL;
 			clockend = rtclock(); // stop the clock
-			average_par_time = average_par_time + (clockend - clockstart);
-			//printf("%d \n", number_of_runs);
+			if(number_of_runs!=4){
+				average_par_time = average_par_time + (clockend - clockstart); //ignore the first time
+
+			}
+			number_of_runs--;
+		}else{
 			number_of_runs--;
 		}
 	}
